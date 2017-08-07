@@ -17,6 +17,9 @@ router.get('/wiki-philosophy', function(req,res,next){
 			res.status(400);
 			res.send('Error trying to find path');
 		});
+	} else {
+		res.status(400);
+		res.send('Missing title');
 	}
 });
 
