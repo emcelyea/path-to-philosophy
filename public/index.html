@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Wiki Philosophy</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+	<div class="container">
+		<div class="row">
+			<h3>Wikipedia Path To Philosophy</h3>
+		</div>
+		<div class="row">	
+			<div class="col-med-12">
+				<div class="form-group">
+					<label>Page To Start At</label>
+					<input class="form-control" id="title-input"/>
+				</div>
+				<div class="alert alert-danger" id="alert-error" style="display:none"></div>
+				<button class="btn btn-success" onclick="submitTitle()">Search</button>
+			</div>
+			<div class="col-med-12" id="loading-spinner">
+				<i class="fa fa-spinner fa-spin" style="font-size:48px;color:blue;"></i>			
+				Getting Path...
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-med-12">
+				<p id="philosophy-path"></p>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="./js/wiki-philosophy.js" type="text/javascript"></script>
+	<script type="text/javascript">
+
+		function submitTitle(){
+			document.getElementById('philosophy-path').innerHTML = '';
+			toggleError();
+			var title = document.getElementById('title-input').value;
+			if(!title){
+				toggleError('Missing Title Field');
+			} else {
+				toggleSpinner();
+				var pathFinder = new WikiPhilosophy();
+				pathFinder.getPath(title)
+				.then(function(path){
+					pathFinder.drawPath(document.getElementById('philosophy-path'));
+					toggleSpinner();
+				}, function(err){
+					console.error(err);
+					toggleSpinner();
+					toggleError(err);
+				});
+			}
+		}
+
+		//hide show error
+		function toggleError(innerHTML){
+			var error = document.getElementById('alert-error');
+			if(innerHTML){
+				error.style.display = 'block';
+				error.innerHTML = innerHTML;
+			} else {
+				error.style.display = 'none';
+			}
+		}
+
+		function toggleSpinner(){
+			var spin = document.getElementById('loading-spinner');
+			if(spin.style.display === 'none'){
+				spin.style.display = '';
+			}else {
+				spin.style.display = 'none';
+			}
+		}
+		toggleSpinner();
+	</script>
+</body>
+</html>
