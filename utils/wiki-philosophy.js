@@ -1,5 +1,5 @@
 /*WIKIPHILOSOPHY Util
-takes a title, returns in order array of page titles hit on path to Philosophy or null*/
+takes a title, returns in order array of page titles hit on path to Philosophy*/
 const request = require('request');
 const cheerio = require('cheerio');
 const host = 'en.wikipedia.org';
@@ -12,7 +12,6 @@ function getPhilosophyPath(title, path){
 		path = [];
 	}
 	return new Promise( (resolve, reject) => {
-		//loop detected
 		path.push(title);
 		getPage(title)
 		.then( page => {
@@ -34,7 +33,7 @@ function getPhilosophyPath(title, path){
 	}).then( link => {
 		if(!link){ // !page or page has no links
 			return path;
-		} else if(path.indexOf(link) > -1){ //encounterd a loop
+		} else if(path.indexOf(link) > -1){ //encountered a loop
 			path.push(link);
 			return path;
 		}else if (link.toLowerCase() === 'philosophy'){ //succeeded in finding path
